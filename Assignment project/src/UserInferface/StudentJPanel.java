@@ -4,7 +4,11 @@
  */
 package UserInferface;
 
+import MainModel.CourseHistory;
+import MainModel.StudentClass;
+import MainModel.StudentDirectory;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -17,14 +21,18 @@ public class StudentJPanel extends javax.swing.JPanel {
      * Creates new form StudentJPanel
      */
     private JPanel WorkArea;
+    private StudentDirectory StudentDirectory;
+    private CourseHistory courseHistory;
     
 //    public StudentJPanel() {
 //        initComponents();
 //    }
 
-    StudentJPanel(JPanel WorkArea) {
+    StudentJPanel(JPanel WorkArea,StudentDirectory StudentDirectory, CourseHistory courseHistory) {
         initComponents();
         this.WorkArea=WorkArea;
+        this.StudentDirectory=StudentDirectory;
+        this.courseHistory=courseHistory;
     }
 
     /**
@@ -46,11 +54,16 @@ public class StudentJPanel extends javax.swing.JPanel {
         btnLogin = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(186, 79, 84));
+
+        jLabel1.setForeground(new java.awt.Color(242, 242, 242));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome To Student Login");
 
+        jLabel2.setForeground(new java.awt.Color(242, 242, 242));
         jLabel2.setText("UserID");
 
+        jLabel3.setForeground(new java.awt.Color(242, 242, 242));
         jLabel3.setText("Password");
 
         jPasswordField.addActionListener(new java.awt.event.ActionListener() {
@@ -59,6 +72,7 @@ public class StudentJPanel extends javax.swing.JPanel {
             }
         });
 
+        jCheckBox.setForeground(new java.awt.Color(242, 242, 242));
         jCheckBox.setText("Show Password");
         jCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +156,12 @@ public class StudentJPanel extends javax.swing.JPanel {
 
     private void jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxActionPerformed
         // TODO add your handling code here:
+        if(jCheckBox.isSelected()){
+            jPasswordField.setEchoChar((char)0);
+        }
+        else{
+            jPasswordField.setEchoChar('*');
+        }
     }//GEN-LAST:event_jCheckBoxActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -153,7 +173,7 @@ public class StudentJPanel extends javax.swing.JPanel {
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
         // TODO add your handling code here:
-        StudentSignUpJPanel studentsignupjpanel=new StudentSignUpJPanel(WorkArea);
+        StudentSignUpJPanel studentsignupjpanel=new StudentSignUpJPanel(WorkArea,StudentDirectory);
         WorkArea.add("StudentSignUpJPanel",studentsignupjpanel);
         CardLayout layout=(CardLayout) WorkArea.getLayout();
         layout.next(WorkArea);
@@ -161,10 +181,21 @@ public class StudentJPanel extends javax.swing.JPanel {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        StudentLoginJPanel studentloginjpanel=new StudentLoginJPanel(WorkArea);
+        StudentClass foundStudent=StudentDirectory.searcStudentNameandpassword(txtUserID.getText(), jPasswordField.getText());
+        if(foundStudent==null){
+            JOptionPane.showMessageDialog(null,"Password Doesn't match","Information",JOptionPane.INFORMATION_MESSAGE);
+            txtUserID.setText(null);
+            jPasswordField.setText(null);
+        }
+        else{
+        StudentLoginJPanel studentloginjpanel=new StudentLoginJPanel(WorkArea,StudentDirectory,foundStudent, courseHistory);
         WorkArea.add("StudentLoginJPanel",studentloginjpanel);
         CardLayout layout=(CardLayout) WorkArea.getLayout();
         layout.next(WorkArea);
+        JOptionPane.showMessageDialog(null,"Successfully Login!!");
+        txtUserID.setText(null);
+        jPasswordField.setText(null);
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void jPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldActionPerformed

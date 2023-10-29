@@ -4,7 +4,11 @@
  */
 package UserInferface;
 
+import MainModel.ProfessorHistory;
+import MainModel.StudentClass;
+import MainModel.StudentDirectory;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -17,14 +21,18 @@ public class AdminJPanel extends javax.swing.JPanel {
      * Creates new form AdminJPanel
      */
     private JPanel WorkArea;
-    
+    private StudentDirectory StudentDirectory;
+    //private StudentClass StudentClass;
+    private ProfessorHistory ProfessorHistory;
 //    
 //    public AdminJPanel() {
 //        initComponents();
 //    }
-    AdminJPanel(JPanel WorkArea) {
+    AdminJPanel(JPanel WorkArea,StudentDirectory StudentDirectory,ProfessorHistory ProfessorHistory) {
         initComponents();
+        this.StudentDirectory=StudentDirectory;
         this.WorkArea=WorkArea;
+        this.ProfessorHistory=ProfessorHistory;
     }
 
     /**
@@ -38,17 +46,25 @@ public class AdminJPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtUserName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnLogin = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
         jCheckBox1 = new javax.swing.JCheckBox();
         btnBack = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(186, 79, 84));
+
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome Admin");
 
         jLabel2.setText("Username");
+
+        txtUserName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUserNameActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Password");
 
@@ -89,24 +105,22 @@ public class AdminJPanel extends javax.swing.JPanel {
                         .addGap(33, 33, 33)
                         .addComponent(btnBack))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCheckBox1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(btnLogin))))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(237, 237, 237)
-                        .addComponent(jLabel1)))
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnLogin)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(64, 64, 64)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtUserName)
+                                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBox1)))
                 .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,15 +131,15 @@ public class AdminJPanel extends javax.swing.JPanel {
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox1))
-                .addGap(45, 45, 45)
+                .addGap(18, 18, 18)
                 .addComponent(btnLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                 .addComponent(btnBack)
                 .addGap(43, 43, 43))
         );
@@ -133,10 +147,35 @@ public class AdminJPanel extends javax.swing.JPanel {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        AdminLoginJPanel adminloginjpanel=new AdminLoginJPanel(WorkArea);
-        WorkArea.add("AdminLoginJPanel",adminloginjpanel);
-        CardLayout layout=(CardLayout) WorkArea.getLayout();
-        layout.next(WorkArea);
+        if(txtUserName.getText().equals("")){
+           JOptionPane.showMessageDialog(null,"Enter the UserName");
+        }
+        else if(jPasswordField1.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Enter the password");
+        }
+        else{
+            if(txtUserName.getText().equals("admin"))
+            {
+                if(jPasswordField1.getText().equals("1234"))
+                {
+                    AdminLoginJPanel adminloginjpanel=new AdminLoginJPanel(WorkArea,StudentDirectory,ProfessorHistory);
+                    WorkArea.add("AdminLoginJPanel",adminloginjpanel);
+                    CardLayout layout=(CardLayout) WorkArea.getLayout();
+                    layout.next(WorkArea);
+                    JOptionPane.showMessageDialog(null,"Succesfully Login!!!");
+                    txtUserName.setText(null);
+                    jPasswordField1.setText(null);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Enter Password is doesn't match");
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "UserName/Password doesn't Exsit!!");
+            }
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
@@ -152,7 +191,18 @@ public class AdminJPanel extends javax.swing.JPanel {
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
+        if(jCheckBox1.isSelected()){
+            jPasswordField1.setEchoChar((char)0);
+        }
+        else{
+            jPasswordField1.setEchoChar('*');
+        }
+        
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUserNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -163,6 +213,6 @@ public class AdminJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
 }
